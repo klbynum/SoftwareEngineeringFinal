@@ -2,7 +2,7 @@ import React from 'react'
 
 function CourseSearch() {
   return (
-    <div>CourseSearch</div>
+    <div>CourseSearch Added</div>
   )
 }
 
