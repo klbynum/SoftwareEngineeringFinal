@@ -2,30 +2,41 @@ import React, { useEffect, useState } from 'react';
 import '../Home/Home.css';
 
 function CourseSearch() {
-  const [courses, setCourses] = useState([]);
+  const [allCourses, setAllCourses] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [filteredCourses, setFilteredCourses] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5001/cybersecurityTrack')
-      .then(res => res.json())
-      .then(data => {
-        const list = data?.CybersecurityTrack || [];
-        setCourses(list);
-        setFilteredCourses(list);
-      })
-      .catch(err => console.error('Failed to fetch courses:', err));
+    const fetchTracks = async () => {
+      try {
+        const cyberRes = await fetch('http://localhost:5001/cybersecurityTrack');
+        const cyberData = await cyberRes.json();
+        const cyberList = cyberData?.CybersecurityTrack1 || [];
+
+        const softRes = await fetch('http://localhost:5001/softwareEngineerTrack');
+        const softData = await softRes.json();
+        const softList = softData?.SoftwareEngineerTrack || [];
+
+        const combined = [...cyberList, ...softList];
+        setAllCourses(combined);
+        setFilteredCourses(combined);
+      } catch (err) {
+        console.error('Failed to fetch courses:', err);
+      }
+    };
+
+    fetchTracks();
   }, []);
 
   const handleSearch = () => {
     console.log("Search Input:", searchInput);
     const value = searchInput.toLowerCase();
-    const filtered = courses.filter(course =>
-      course.course_number.toLowerCase().includes(value) ||
-      course.course.toLowerCase().includes(value)
+    const filtered = allCourses.filter(course =>
+      course.course_number?.toLowerCase().includes(value) ||
+      course.course?.toLowerCase().includes(value)
     );
     setFilteredCourses(filtered);
-    console.log("Filtered Courses:", filtered);
+    console.log("Filtered Courses: ",filtered )
   };
 
   const handleKeyPress = (e) => {
@@ -78,3 +89,4 @@ function CourseSearch() {
 }
 
 export default CourseSearch;
+

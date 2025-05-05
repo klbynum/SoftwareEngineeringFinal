@@ -23,7 +23,7 @@ app.get('/softwareEngineerTrack', (req, res) => {
         }
         try {
             const softTrack = JSON.parse(data);
-            res.json(softTrack);
+            res.json({ SoftwareEngineerTrack: softTrack }); // Wrap response in object
         } catch (parseErr) {
             console.error('Failed to parse track: ', parseErr);
             res.status(500).json({ error: 'Invalid JSON format on software engineering track' });
@@ -39,7 +39,7 @@ app.get('/cybersecurityTrack', (req, res) => {
         }
         try {
             const cyberTrack = JSON.parse(data);
-            res.json(cyberTrack);
+            res.json({ CybersecurityTrack1: cyberTrack }); // Wrap response in object
         } catch (parseErr) {
             console.error('Failed to parse track: ', parseErr);
             res.status(500).json({ error: 'Invalid JSON format on Cybersecurity track' });
