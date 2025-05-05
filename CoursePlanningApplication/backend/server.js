@@ -16,6 +16,7 @@ const softwareEngineeringTrack = './data/SoftwareEngineer/SoftwareEngineerTrack.
 const cyberSecurityTrack = './data/CybersecurityTrack/CybersecurityTrack.json'; 
 const stuRecFile = './data/students.json';
 const courseSectionsFile = './data/courseSections.json';
+const courseTakenFile = './data/coursesTaken.json'
 
 // Software Engineering Track Route
 app.get('/softwareEngineerTrack', (req, res) => { 
@@ -60,6 +61,20 @@ app.get('/students', (req, res) => {
         } catch (parseErr) {
             console.error('Failed to parse track: ', parseErr);
             res.status(500).json({ error: 'Invalid JSON format on student records' });
+        }
+    });
+});
+app.get('/courseTaken', (req, res) => {
+    fs.readFile(courseTakenFile, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read sections json' });
+        }
+        try {
+            const courTake = JSON.parse(data);
+            res.json(courTake);
+        } catch (parseErr) {
+            console.error('Failed to parse track: ', parseErr);
+            res.status(500).json({ error: 'Invalid JSON format on sections json' });
         }
     });
 });

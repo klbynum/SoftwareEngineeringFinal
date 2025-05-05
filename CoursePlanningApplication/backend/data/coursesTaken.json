@@ -1,7 +1,7 @@
 {
     "students": [
       {
-        "student_id": "S12345",
+        "StudentID": "S12345",
         "courses_taken": [
           "CSC 101",
           "CSC 260",
@@ -15,7 +15,7 @@
         ]
       },
       {
-        "student_id": "S67890",
+        "StudentID": "S67890",
         "courses_taken": [
           "CSC 101",
           "CSC 260",
