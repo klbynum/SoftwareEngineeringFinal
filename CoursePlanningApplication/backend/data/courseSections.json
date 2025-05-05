@@ -1,0 +1,312 @@
+{
+    "Sections": [
+      {
+        "course_number": "SEM 101",
+        "Professor": "Shorts, Madison",
+        "Meeting Time": "10:30 AM - 11:30 AM",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "SEM 101",
+        "Professor": "Jackson, Marlena",
+        "Meeting Time": "2:00 PM - 3:00 PM",
+        "Day(s)": "TR",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 101",
+        "Professor": "Olatunbosun, Samuel",
+        "Meeting Time": "1:00 PM - ",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 170",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1:30 - 3:00 PM",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 170L",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "30"
+      },
+      {
+        "course_number": "MTH 153",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "ENG 101",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 260",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "20"
+      },
+      {
+        "course_number": "CSC 260L",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "SEM 102",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "MTH 184",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "ENG 102",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "1",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 295",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "MTH 251",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "MTH 371",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 292",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 435",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 373",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 380",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "99",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 485",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "99",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 486",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "99",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 499",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "99",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 468",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 488",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 487",
+       "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "MTH 153",
+         "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "PED 100",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "HED 100",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 372",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "MTH 251",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 268",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 275",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "ENG 303",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "ENG 285",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 430",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "MTH 351",
+        "Professor": "Spartan Seminar",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 449",
+        "Professor": "No Name",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 420",
+        "Professor": "No Name",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 361",
+        "Professor": "No Name",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 445 (START OF YEAR FOUR)",
+        "Professor": "No Name",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 498",
+        "Professor": "No Name",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 464",
+        "Professor": "No Name",
+        "Meeting Time": "9",
+        "Day(s)": "M",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 313",
+        "Professor": "No Name",
+        "Meeting Time": "11:30-1:00 PM",
+        "Day(s)": "MW",
+        "Seat Available": "25"
+      },
+      {
+        "course_number": "CSC 494",
+        "Professor": "No Name",
+        "Meeting Time": "9:00 AM-10:00 AM",
+        "Day(s)": "MWF",
+        "Seat Available": "25"
+      }
+    ]
+  }
