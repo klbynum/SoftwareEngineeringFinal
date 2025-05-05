@@ -1,0 +1,22 @@
+{
+    "StudentRecords": [
+      {
+        "firstName": "SEM 101",
+        "lastName": "Spartan Seminar",
+        "StudentID": "",
+        "Degree": "1",
+        "Department": "",
+        "username": "",
+        "password": ""
+      },
+      {
+        "firstName": "",
+        "lastName": "",
+        "StudentID": "",
+        "Degree": "1",
+        "Department": "",
+        "username": "",
+        "password": ""
+      }
+    ]
+  }

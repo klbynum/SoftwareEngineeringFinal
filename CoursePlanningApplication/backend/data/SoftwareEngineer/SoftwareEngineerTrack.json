@@ -1,0 +1,262 @@
+{
+    "SoftwareEngineeringTrack1": [
+      {
+        "course_number": "SEM 101",
+        "course": "Spartan Seminar",
+        "credits": "1",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 101",
+        "course": "Introduction to the Comp Sci Profession",
+        "credits": "1",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 170",
+        "course": "Computer Programming I",
+        "credits": "3",
+        "prerequisite": "MTH 105"
+      },
+      {
+        "course_number": "CSC 170L",
+        "course": "Computer Programming I Lab",
+        "credits": "1",
+        "prerequisite": "MTH 105"
+      },
+      {
+        "course_number": "MTH 153",
+        "course": "College Algebra and Trigonometry",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "ENG 101",
+        "course": "Communications Skills I",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "PED 100",
+        "course": "Fundamental of Fitness for Life",
+        "credits": "1",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 260",
+        "course": "Computer Programming II",
+        "credits": "3",
+        "prerequisite": "CSC 170"
+      },
+      {
+        "course_number": "CSC 260L",
+        "course": "Computer Programming II Lab",
+        "credits": "1",
+        "prerequisite": "CSC 170"
+      },
+      {
+        "course_number": "SEM 102",
+        "course": "Spartan Seminar",
+        "credits": "1",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "MTH 184",
+        "course": "Calculus I",
+        "credits": "4",
+        "prerequisite": "MTH 153"
+      },
+      {
+        "course_number": "ENG 102",
+        "course": "Communications Skills II",
+        "credits": "3",
+        "prerequisite": "ENG 101"
+      },
+      {
+        "course_number": "",
+        "course": "Social Science Elective",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "SEM 102",
+        "course": "Spartan Seminar",
+        "credits": "1",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 295",
+        "course": "Java Programming",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "",
+        "course": "Laboratory Science Elective",
+        "credits": "4",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "MTH 251",
+        "course": "Calculus II",
+        "credits": "4",
+        "prerequisite": "MTH 184"
+      },
+      {
+        "course_number": "MTH 371",
+        "course": "Discrete Mathematical Structures",
+        "credits": "4",
+        "prerequisite": "MTH 184"
+      },
+      {
+        "course_number": "CSC 268",
+        "course": "Computer Organization",
+        "credits": "3",
+        "prerequisite": "CSC 170"
+      },
+      {
+        "course_number": "CSC 372",
+        "course": "Data Structures",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "CSC 292",
+        "course": "Unix and C Programming",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "CSC 435",
+        "course": "Computer Security",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "ENG 285",
+        "course": "Principles of Speech",
+        "credits": "3",
+        "prerequisite": "ENG 102"
+      },
+      {
+        "course_number": "CSC 373",
+        "course": "Algorithms Design and Analysis",
+        "credits": "3",
+        "prerequisite": "CSC 372"
+      },
+      {
+        "course_number": "ENG 303",
+        "course": "Technical Writing",
+        "credits": "3",
+        "prerequisite": "ENG 102"
+      },
+      {
+        "course_number": "",
+        "course": "Social Science Cultural Elective",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "MTH 351",
+        "course": "Probability and Statistics I",
+        "credits": "3",
+        "prerequisite": "MTH 251"
+      },
+      {
+        "course_number": "",
+        "course": "Second Laboratory Science Elective",
+        "credits": "4",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 361",
+        "course": "Survey of Programming Languages",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "CSC 420",
+        "course": "Database Principles & Design",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "CSC 380",
+        "course": "Software Engineering",
+        "credits": "3",
+        "prerequisite": "CSC 260"
+      },
+      {
+        "course_number": "Elective",
+        "course": "Comp. Sci. Elective 300 level or above",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "",
+        "course": "Humanities",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 498",
+        "course": "Senior Seminar I",
+        "credits": "2",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 464",
+        "course": "Operating Systems",
+        "credits": "3",
+        "prerequisite": "CSC 372"
+      },
+      {
+        "course_number": "CSC 485",
+        "course": "Software Quality Assurance & Testing",
+        "credits": "3",
+        "prerequisite": "CSc 380"
+      },
+      {
+        "course_number": "CSC 430",
+        "course": "Data Communication",
+        "credits": "3",
+        "prerequisite": "CSC 372"
+      },
+      {
+        "course_number": "CSC 486",
+        "course": "Software Project Management",
+        "credits": "3",
+        "prerequisite": "CSC 380"
+      },
+      {
+        "course_number": "CSC 499",
+        "course": "Senior Seminar II",
+        "credits": "2",
+        "prerequisite": "CSC 498"
+      },
+      {
+        "course_number": "CSC 468",
+        "course": "Computer Architecture",
+        "credits": "3",
+        "prerequisite": "CSC 268"
+      },
+      {
+        "course_number": "",
+        "course": "Humanities Cultural Elective",
+        "credits": "3",
+        "prerequisite": ""
+      },
+      {
+        "course_number": "CSC 488",
+        "course": "Principles of Distributed Software Systems",
+        "credits": "3",
+        "prerequisite": "CSC 464"
+      },
+      {
+        "course_number": "CSC 487",
+        "course": "Engineering Secure Software Systems",
+        "credits": "3",
+        "prerequisite": "CSC 380"
+      }
+    ]
+  }
