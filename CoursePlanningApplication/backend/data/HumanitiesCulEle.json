@@ -1,0 +1,17 @@
+{
+    "HumanitiesCulturalElectives":
+    [
+        {
+            "course_number": "ENG 383",
+            "course_name":"African-American Literature, 1940-PRESENT",
+            "credits": "3",
+            "semester": "Fall"
+        },
+        {
+            "course_number": "MUS 234",
+            "course_name":"African-American Music",
+            "credits": "3",
+            "semester": "Spring"
+        }
+    ]
+}
