@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Menu, X, User, HelpCircle, Award, Book, BookOpen, Building } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 
 function Home() {
   const [isOpen, setIsOpen] = useState(false);
-  // Student info - in real app this would come from authentication/API
   const [studentName, setStudentName] = useState("John Doe");
   const [studentInfo, setStudentInfo] = useState({
     creditsCompleted: 57,
@@ -14,35 +14,35 @@ function Home() {
     major: "Computer Science",
     department: "Computer Science"
   });
-  
+
   const navItems = [
-    { title: 'Home', link: '#home' },
-    { title: 'Academic Tracker', link: '#academic-tracker' },
-    { title: 'Course Search', link: '#course-search' },
+    { title: 'Home', link: '/' },
+    { title: 'Academic Tracker', link: '/AcademicTracker' },
+    { title: 'Course Search', link: '/CourseSearch' },
   ];
-  
+
   return (
     <div className="page">
       <nav className="navbar">
         <div className="nav-container">
           <span className="logo">NSU Course Planning Application</span>
-          
+
           <div className="user-controls hidden md:flex">
             <div className="relative group">
               <button className="user-button focus:outline-none">
                 <User className="h-5 w-5" />
               </button>
               <div className="user-dropdown">
-                <a href="#login" className="dropdown-link">Login</a>
-                <a href="#logout" className="dropdown-link">Logout</a>
-                <a href="#profile" className="dropdown-link">My Profile</a>
+                <Link to="/Login" className="dropdown-link">Login</Link>
+                <Link to="/Login" className="dropdown-link">Logout</Link>
+                <Link to="/Profile" className="dropdown-link">My Profile</Link>
               </div>
             </div>
-            <a href="#help" className="user-button focus:outline-none">
+            <Link to="/Help" className="user-button focus:outline-none">
               <HelpCircle className="h-5 w-5" />
-            </a>
+            </Link>
           </div>
-          
+
           <div className="md:hidden flex items-center">
             <button className="menu-button focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -50,41 +50,41 @@ function Home() {
           </div>
         </div>
       </nav>
-      
+
       <div className="secondary-nav">
         <div className="secondary-nav-inner">
           {navItems.map((item, index) => (
-            <a key={index} href={item.link} className="secondary-link">{item.title}</a>
+            <Link key={index} to={item.link} className="secondary-link">{item.title}</Link>
           ))}
         </div>
       </div>
-      
+
       {isOpen && (
         <div className="mobile-menu md:hidden">
           {navItems.map((item, index) => (
-            <a
+            <Link
               key={index}
-              href={item.link}
+              to={item.link}
               className="mobile-item"
               onClick={() => setIsOpen(false)}
             >
               {item.title}
-            </a>
+            </Link>
           ))}
           <div className="mobile-user-section">
-            <a href="#login" className="mobile-user-link"><User /><span>Login</span></a>
-            <a href="#logout" className="mobile-user-link"><User /><span>Logout</span></a>
-            <a href="#profile" className="mobile-user-link"><User /><span>My Profile</span></a>
-            <a href="#help" className="mobile-user-link"><HelpCircle /><span>Help</span></a>
+            <Link to="/Login" className="mobile-user-link"><User /><span>Login</span></Link>
+            <Link to="/Login" className="mobile-user-link"><User /><span>Logout</span></Link>
+            <Link to="/Profile" className="mobile-user-link"><User /><span>My Profile</span></Link>
+            <Link to="/Help" className="mobile-user-link"><HelpCircle /><span>Help</span></Link>
           </div>
         </div>
       )}
-      
+
       {/* Welcome section */}
       <div className="welcome-section">
         <h1 className="welcome-heading">Welcome, {studentName}!</h1>
         <p className="welcome-text">Manage your courses and academic progress</p>
-        
+
         {/* Progress tracker and student info */}
         <div className="progress-container">
           <div className="progress-tracker">
@@ -93,8 +93,8 @@ function Home() {
               <span className="progress-value">{studentInfo.creditsCompleted} of {studentInfo.totalCredits}</span>
             </div>
             <div className="progress-bar-container">
-              <div 
-                className="progress-bar-fill" 
+              <div
+                className="progress-bar-fill"
                 style={{ width: `${(studentInfo.creditsCompleted / studentInfo.totalCredits) * 100}%` }}
               ></div>
             </div>
@@ -102,7 +102,7 @@ function Home() {
               {Math.round((studentInfo.creditsCompleted / studentInfo.totalCredits) * 100)}% Complete
             </span>
           </div>
-          
+
           <div className="student-info-grid">
             <div className="info-card">
               <Award className="info-icon" />
@@ -111,7 +111,7 @@ function Home() {
                 <span className="info-value">{studentInfo.gpa.toFixed(2)}</span>
               </div>
             </div>
-            
+
             <div className="info-card">
               <BookOpen className="info-icon" />
               <div className="info-details">
@@ -119,7 +119,7 @@ function Home() {
                 <span className="info-value">{studentInfo.degree}</span>
               </div>
             </div>
-            
+
             <div className="info-card">
               <Book className="info-icon" />
               <div className="info-details">
@@ -127,7 +127,7 @@ function Home() {
                 <span className="info-value">{studentInfo.major}</span>
               </div>
             </div>
-            
+
             <div className="info-card">
               <Building className="info-icon" />
               <div className="info-details">
