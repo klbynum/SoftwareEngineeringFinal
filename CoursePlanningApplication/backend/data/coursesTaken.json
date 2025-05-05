@@ -1,0 +1,33 @@
+{
+    "students": [
+      {
+        "student_id": "S12345",
+        "courses_taken": [
+          "CSC 101",
+          "CSC 260",
+          "CSC 260 L",
+          "CSC 295",
+          "CSC 380",
+          "CSC 170",
+          "CSC 170 L",
+          "SEM 101",
+          "SEM 102"
+        ]
+      },
+      {
+        "student_id": "S67890",
+        "courses_taken": [
+          "CSC 101",
+          "CSC 260",
+          "CSC 260 L",
+          "CSC 295",
+          "CSC 380",
+          "CSC 170",
+          "CSC 170 L",
+          "SEM 101",
+          "SEM 102"
+        ]
+      }
+    ]
+  }
+  
