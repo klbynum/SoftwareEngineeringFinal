@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 
 const softwareEngineeringTrack = './data/SoftwareEngineer/SoftwareEngineerTrack.json';
 const cyberSecurityTrack = './data/CybersecurityTrack/CybersecurityTrack.json'; 
+const stuRecFile = './data/students.json'
 
 // Software Engineering Track Route
 app.get('/softwareEngineerTrack', (req, res) => { 
@@ -34,6 +35,21 @@ app.get('/softwareEngineerTrack', (req, res) => {
 // Cybersecurity Track Route
 app.get('/cybersecurityTrack', (req, res) => {
     fs.readFile(cyberSecurityTrack, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read Cybersecurity track' });
+        }
+        try {
+            const cyberTrack = JSON.parse(data);
+            res.json(cyberTrack);
+        } catch (parseErr) {
+            console.error('Failed to parse track: ', parseErr);
+            res.status(500).json({ error: 'Invalid JSON format on Cybersecurity track' });
+        }
+    });
+});
+
+app.get('/students', (req, res) => {
+    fs.readFile(stuRecFile, 'utf8', (err, data) => {
         if (err) {
             return res.status(500).json({ error: 'Failed to read Cybersecurity track' });
         }
