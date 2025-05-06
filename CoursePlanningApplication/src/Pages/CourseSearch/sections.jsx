@@ -7,16 +7,21 @@ function Sections() {
   const [loading, setLoading] = useState(false);
   const [hasAdded, setHasAdded] = useState(false);
   const [originalSeatCounts, setOriginalSeatCounts] = useState({});
+  const [studentId, setStudentId] = useState(null);
 
   useEffect(() => {
     if (!course_number) return;
 
     fetchSections();
 
-    // Check if course was already added
     const addedCourses = JSON.parse(localStorage.getItem('addedCourses') || '[]');
     if (addedCourses.includes(course_number)) {
       setHasAdded(true);
+    }
+
+    const storedStudentId = localStorage.getItem('StudentID');
+    if (storedStudentId) {
+      setStudentId(storedStudentId);
     }
   }, [course_number]);
 
@@ -27,7 +32,6 @@ function Sections() {
         const allSections = data.Sections || [];
         setSections(allSections);
 
-        // Store original seat counts when the data is fetched
         const initialSeats = {};
         allSections.forEach((section, index) => {
           initialSeats[index] = section['Seat Available'];
@@ -50,13 +54,8 @@ function Sections() {
 
       fetch('http://localhost:5001/sections/updateSeat', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          course_number: course_number,
-          section_index: index
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_number, section_index: index })
       })
         .then(res => res.json())
         .then(data => {
@@ -65,13 +64,14 @@ function Sections() {
             alert(data.error);
           } else {
             setHasAdded(true);
-            // Save to localStorage
             const addedCourses = JSON.parse(localStorage.getItem('addedCourses') || '[]');
             if (!addedCourses.includes(course_number)) {
               addedCourses.push(course_number);
               localStorage.setItem('addedCourses', JSON.stringify(addedCourses));
             }
-            fetchSections(); // Refresh data after backend updates
+
+            postToSchedule(index);
+            fetchSections();
           }
         })
         .catch(err => {
@@ -84,11 +84,42 @@ function Sections() {
     }
   };
 
+  const postToSchedule = (index) => {
+    const selectedSection = sections[index];
+
+    const schedule = {
+      studentId,
+      courses: [
+        {
+          course_number: selectedSection.course_number,
+          section_index: selectedSection.section_index
+        }
+      ]
+    };
+
+    fetch('http://localhost:5001/schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(schedule)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          alert('Failed to save schedule: ' + data.error);
+        } else {
+          alert('Schedule saved successfully!');
+        }
+      })
+      .catch(err => {
+        console.error('Error saving schedule:', err);
+        alert('Failed to save schedule.');
+      });
+  };
+
   const handleResetAddedCourses = () => {
     localStorage.removeItem('addedCourses');
-    setHasAdded(false); // Reset the UI to allow adding again
+    setHasAdded(false);
 
-    // Reset seats to original values
     const updatedSections = sections.map((section, index) => {
       if (originalSeatCounts[index] !== undefined) {
         section['Seat Available'] = originalSeatCounts[index];
@@ -98,24 +129,18 @@ function Sections() {
 
     setSections(updatedSections);
 
-    // Optionally, send the updated seat count to the backend if needed
     updatedSections.forEach((section, index) => {
       if (section['Seat Available'] !== originalSeatCounts[index]) {
         fetch('http://localhost:5001/sections/updateSeat', {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            course_number: course_number,
-            section_index: index
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ course_number, section_index: index })
         }).catch(err => console.error('Error resetting seats:', err));
       }
     });
 
     alert('Added courses have been reset, and seats are restored.');
-    window.location.reload(); // Reload to reset state properly
+    window.location.reload();
   };
 
   return (
@@ -159,7 +184,6 @@ function Sections() {
           </ul>
         )}
 
-        {/* Reset Added Courses Button for Debugging */}
         <button
           onClick={handleResetAddedCourses}
           style={{
@@ -182,4 +206,5 @@ function Sections() {
 }
 
 export default Sections;
+
 
