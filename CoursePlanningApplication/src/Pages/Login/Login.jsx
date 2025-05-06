@@ -2,9 +2,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { useAuth } from '/Users/kemonbynum/Desktop/myPlayground/SoftwareEngineeringFinal/CoursePlanningApplication/src/AuthContext.jsx';
+import { useAuth } from '../../AuthContext'; // Fixed the import path
 
 const LOGIN_URL = 'http://localhost:5001/auth';
+const STUDENT_DATA_URL = 'http://localhost:5001/students'; // Added missing constant
 
 const Login = () => {
   const userRef = useRef();
@@ -12,11 +13,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   const { setStudent } = useAuth();
-  const navigate = useNavigate();
 
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
+  const [studentData, setStudentData] = useState(null); // Added missing state
 
   useEffect(() => {
     userRef.current?.focus();
