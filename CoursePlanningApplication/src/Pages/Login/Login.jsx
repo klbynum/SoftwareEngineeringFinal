@@ -25,8 +25,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Clear error messages
+
     setErrMsg('');
 
     try {
@@ -44,11 +43,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Successfully logged in
-        setFirstName(data.student.firstName); // Assuming the first name is part of the response
+        setFirstName(data.student.firstName);
         setSuccess(true);
       } else {
-        // Display error message
         setErrMsg(data.error || 'Login failed');
       }
     } catch (error) {
@@ -63,30 +60,45 @@ const Login = () => {
     <>
       {success ? (
         <section>
-          <h1>You are logged in, {firstName}!</h1> {/* Display the first name here */}
+          <h1>You are logged in, {firstName}!</h1>
           <p>
             <Link to="/">Go to Home</Link>
           </p>
         </section>
       ) : (
-    <div className="login-page">
-      <div className="wrapper">
-        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}aria-live="assertive">
-        {errMsg} </p>
-        <h1>Sign in to (NSU Course Planning Application)</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="input-box">
-            <FaUserAlt className="icon" />
-            <input 
-              type="text" 
-              id="username"
-              ref ={userRef} 
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              required
-              placeholder='Username'
-            />
+        <div className="login-page">
+          <div className="wrapper">
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+              {errMsg}
+            </p>
+            <h1>Sign in to (NSU Course Planning Application)</h1>
+            <form onSubmit={handleSubmit}>
+              <div className="input-box">
+                <FaUserAlt className="icon" />
+                <input
+                  type="text"
+                  id="username"
+                  ref={userRef}
+                  autoComplete="off"
+                  onChange={(e) => setUser(e.target.value)}
+                  value={user}
+                  required
+                  placeholder="Username"
+                />
+              </div>
+              <div className="input-box">
+                <FaLock className="icon" />
+                <input
+                  type="password"
+                  id="password"
+                  onChange={(e) => setPwd(e.target.value)}
+                  value={pwd}
+                  required
+                  placeholder="Password"
+                />
+              </div>
+              <button type="submit">Login</button>
+            </form>
           </div>
         </div>
       )}
