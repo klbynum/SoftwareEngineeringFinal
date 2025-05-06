@@ -201,7 +201,7 @@ function Home() {
                   </div>
                   <div className="deadline-item">
                     <span className="deadline-label">Commencement:</span>
-                    <span className="deadline-date">May 15, 2025</span>
+                    <span className="deadline-date">May 9, 2025</span>
                   </div>
                 </div>
               </div>
