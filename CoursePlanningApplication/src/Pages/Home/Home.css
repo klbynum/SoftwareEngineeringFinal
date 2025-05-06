@@ -272,3 +272,22 @@
   font-weight: 600;
   color: #1f2937; /* gray-800 */
 }
+/* Set all text to black */
+.page, .page * {
+  color: rgb(71, 28, 28);
+}
+
+/* Exception: keep View Sections button white */
+.view-sections-button {
+  color: white !important;
+  background-color: #047857; /* optional: keeps green background */
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  display: inline-block;
+  margin-top: 0.5rem;
+  text-decoration: none;
+}
+
+.view-sections-button:hover {
+  background-color: #065f46; /* slightly darker green */
+}

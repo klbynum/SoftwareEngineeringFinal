@@ -9,10 +9,10 @@ function CourseSearch() {
   const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5001/cybersecurityTrack')
+    fetch('http://localhost:5001/all')
       .then(res => res.json())
       .then(data => {
-        const list = data?.CybersecurityTrack || [];
+        const list = data?.AllCourses || [];
         setCourses(list);
       })
       .catch(err => console.error('Failed to fetch courses:', err));
@@ -22,8 +22,7 @@ function CourseSearch() {
     setHasSearched(true);
     const value = searchInput.toLowerCase();
     const filtered = courses.filter(course =>
-      course.course_number.toLowerCase().includes(value) ||
-      course.course.toLowerCase().includes(value)
+      course.course_number.toLowerCase().includes(value)
     );
     setFilteredCourses(filtered);
   };
