@@ -17,7 +17,8 @@ const softwareEngineeringTrack = './data/SoftwareEngineer/SoftwareEngineerTrack.
 const cyberSecurityTrack = './data/CybersecurityTrack/CybersecurityTrack.json'; 
 const stuRecFile = './data/students.json';
 const courseSectionsFile = './data/courseSections.json';
-const courseTakenFile = './data/coursesTaken.json'
+const courseTakenFile = './data/coursesTaken.json';
+const courseSchedule = './data/courseSchedule.json';
 
 // All Courses Route
 app.get('/all', (req, res) => {
@@ -195,6 +196,60 @@ app.put('/sections/updateSeat', (req, res) => {
             });
         } catch (parseErr) {
             res.status(500).json({ error: 'Invalid JSON format in courseSections.json' });
+        }
+    });
+});
+
+app.post('/schedule', (req, res) => {
+    const newSchedule = req.body;
+
+    if (!newSchedule || !newSchedule.studentId || !Array.isArray(newSchedule.courses)) {
+        return res.status(400).json({ error: 'Invalid schedule format. Must include studentId and courses array.' });
+    }
+
+    fs.readFile(courseSchedule, 'utf8', (err, data) => {
+        let schedules = [];
+
+        if (!err && data) {
+            try {
+                schedules = JSON.parse(data);
+            } catch (parseErr) {
+                return res.status(500).json({ error: 'Invalid JSON format in schedule file' });
+            }
+        }
+
+        // Add new schedule
+        schedules.push(newSchedule);
+
+        fs.writeFile(courseSchedule, JSON.stringify(schedules, null, 2), 'utf8', (writeErr) => {
+            if (writeErr) {
+                return res.status(500).json({ error: 'Failed to write schedule file' });
+            }
+
+            res.status(201).json({ message: 'Schedule saved successfully' });
+        });
+    });
+});
+
+app.get('/schedule', (req, res) => {
+    const { studentId } = req.query;
+
+    fs.readFile(courseSchedule, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read schedule file' });
+        }
+
+        try {
+            const schedules = JSON.parse(data);
+
+            if (studentId) {
+                const filtered = schedules.filter(sch => sch.studentId === studentId);
+                return res.json(filtered);
+            }
+
+            res.json(schedules);
+        } catch (parseErr) {
+            return res.status(500).json({ error: 'Invalid JSON format in schedule file' });
         }
     });
 });

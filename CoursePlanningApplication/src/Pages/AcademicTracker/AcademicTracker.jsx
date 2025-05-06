@@ -129,67 +129,6 @@ function AcademicTracker() {
   // Fallback function to load hardcoded data if API fails - Memoized for performance
   const loadFallbackData = useCallback(() => {
     console.log("Loading fallback data due to API failure");
-    
-    // Cybersecurity track data
-    const cyberSecurityData = {
-      "CybersecurityTrack": [
-        {
-          "course_number": "SEM 101",
-          "course": "Spartan Seminar",
-          "credits": "1",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        // ... rest of cybersecurity track data (unchanged)
-        {
-          "course_number": "MUS 101",
-          "course": "Music Appreciation",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        }
-      ]
-    };
-
-    // Student data
-    const studentsData = {
-      "StudentRecords": [
-        {
-          "firstName": "Isabelle",
-          "lastName": "Johnson",
-          "StudentID": "0413840",
-          "GPA": "3.75",
-          "Classification": "Sophomore",
-          "Degree": "Bachelor of Science",
-          "Major": "Computer Science - Cybersecurity Track",
-          "Department": "Computer Science",
-          "CompletedCredits": 45,
-          "TotalCredits": 120
-        }
-      ]
-    };
-
-    // Courses taken data
-    const coursesTakenData = {
-      "students": [
-        {
-          "student_id": "0413840",
-          "courses_taken": [
-            "CSC 101",
-            "CSC 260",
-            "CSC 260L",
-            "CSC 295",
-            "CSC 380",
-            "CSC 170",
-            "CSC 170L",
-            "SEM 101",
-            "SEM 102",
-            "MTH 151",
-            "ENG 101"
-          ]
-        }
-      ]
-    };
 
     // Find the student in the records
     const currentStudent = studentsData.StudentRecords[0];
@@ -478,6 +417,8 @@ function AcademicTracker() {
       <div className="degree-overview">
         <h2 className="section-title">Full Degree Overview - Cybersecurity Track</h2>
         <p className="overview-description">This overview shows your entire degree plan with course statuses based on your classification as a {studentData?.Classification}. Total required credits: {progress.totalCredits}.</p>
+
+
         
         <div className="status-legend">
           <div className="status-item">
