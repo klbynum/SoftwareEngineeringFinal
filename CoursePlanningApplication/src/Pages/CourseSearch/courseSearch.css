@@ -7,7 +7,7 @@
   
   /* Navbar */
   .navbar {
-    background-color: rgba(30, 30, 30, 0.8);
+    background-color: rgba(40, 163, 46, 0.8);
     padding: 1rem 2rem;
     border-radius: 12px;
     margin-bottom: 2rem;
@@ -17,7 +17,7 @@
   .nav-container .logo {
     font-size: 1.8rem;
     font-weight: 600;
-    color: #00c897;
+    color: #030a07;
   }
   
   /* Content wrapper */

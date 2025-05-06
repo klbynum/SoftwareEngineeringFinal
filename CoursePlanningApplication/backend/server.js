@@ -134,7 +134,72 @@ app.get('/sections/:course_number', (req, res) => {
     });
 });
 
-// Add to your existing backend server
+app.put('/sections/updateSeat', (req, res) => {
+    const { course_number, section_index } = req.body;
+
+    if (course_number === undefined || section_index === undefined) {
+        return res.status(400).json({ error: 'Missing course_number or section_index' });
+    }
+
+    fs.readFile(courseSectionsFile, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read courseSections.json' });
+        }
+
+        try {
+            const fileData = JSON.parse(data);
+            const allSections = fileData.Sections || [];
+
+            // Find all sections for the course
+            const courseSections = allSections.filter(
+                section => section.course_number &&
+                section.course_number.toLowerCase() === course_number.toLowerCase()
+            );
+
+            if (!courseSections[section_index]) {
+                return res.status(404).json({ error: 'Section not found' });
+            }
+
+            // Update seat count
+            if (courseSections[section_index]['Seat Available'] > 0) {
+                courseSections[section_index]['Seat Available'] -= 1;
+            } else {
+                return res.status(400).json({ error: 'No seats available' });
+            }
+
+            // Replace the original section in allSections
+            let replaced = false;
+            for (let i = 0, courseIndex = 0; i < allSections.length; i++) {
+                if (allSections[i].course_number &&
+                    allSections[i].course_number.toLowerCase() === course_number.toLowerCase()) {
+                    if (courseIndex === section_index) {
+                        allSections[i] = courseSections[section_index];
+                        replaced = true;
+                        break;
+                    }
+                    courseIndex++;
+                }
+            }
+
+            if (!replaced) {
+                return res.status(500).json({ error: 'Failed to update section in allSections' });
+            }
+
+            // Save updated JSON
+            fs.writeFile(courseSectionsFile, JSON.stringify({ Sections: allSections }, null, 2), 'utf8', (writeErr) => {
+                if (writeErr) {
+                    return res.status(500).json({ error: 'Failed to write updated sections' });
+                }
+
+                res.status(200).json({ message: 'Seat count updated successfully' });
+            });
+        } catch (parseErr) {
+            res.status(500).json({ error: 'Invalid JSON format in courseSections.json' });
+        }
+    });
+});
+
+
 app.post('/auth', (req, res) => {
     const { username, password } = req.body;
 
