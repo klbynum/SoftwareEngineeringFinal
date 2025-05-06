@@ -22,7 +22,7 @@
       "Meeting Time": "1:00 PM - 2:00 PM",
       "Day(s)": "M",
       "Location": "RTC 136",
-      "Seat Available": 23
+      "Seat Available": 25
     },
     {
       "course_number": "CSC 170",
@@ -86,7 +86,7 @@
       "Meeting Time": "3:00 PM - 4:30 PM",
       "Day(s)": "T/Th",
       "Location": "RTC 200",
-      "Seat Available": "20"
+      "Seat Available": 19
     },
     {
       "course_number": "CSC 260",
