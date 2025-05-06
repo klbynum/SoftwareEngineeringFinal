@@ -73,7 +73,7 @@ function AcademicTracker() {
       
       // Step 2: Fetch course data - separate try/catch
       try {
-        const courseData = await fetchDataWithRetry('http://localhost:5001/courses');
+        const courseData = await fetchDataWithRetry('http://localhost:5001/courseTaken');
         
         // Step 3: Process data - moved inside success path
         const currentStudent = studentDataResult.StudentRecords[0];

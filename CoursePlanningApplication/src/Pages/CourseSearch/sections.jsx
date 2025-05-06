@@ -4,20 +4,119 @@ import { useParams, Link } from 'react-router-dom';
 function Sections() {
   const { course_number } = useParams();
   const [sections, setSections] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [hasAdded, setHasAdded] = useState(false);
+  const [originalSeatCounts, setOriginalSeatCounts] = useState({});
 
   useEffect(() => {
     if (!course_number) return;
-    console.log('Looking for course_number:', course_number);
 
+    fetchSections();
+
+    // Check if course was already added
+    const addedCourses = JSON.parse(localStorage.getItem('addedCourses') || '[]');
+    if (addedCourses.includes(course_number)) {
+      setHasAdded(true);
+    }
+  }, [course_number]);
+
+  const fetchSections = () => {
     fetch(`http://localhost:5001/sections/${course_number}`)
       .then(res => res.json())
       .then(data => {
-        console.log('Fetched data:', data);
         const allSections = data.Sections || [];
         setSections(allSections);
+
+        // Store original seat counts when the data is fetched
+        const initialSeats = {};
+        allSections.forEach((section, index) => {
+          initialSeats[index] = section['Seat Available'];
+        });
+        setOriginalSeatCounts(initialSeats);
       })
       .catch(err => console.error('Failed to fetch sections:', err));
-  }, [course_number]);
+  };
+
+  const handleAddToSchedule = (index) => {
+    if (hasAdded) {
+      alert('You have already added this course.');
+      return;
+    }
+
+    const selectedSection = sections[index];
+
+    if (selectedSection['Seat Available'] > 0) {
+      setLoading(true);
+
+      fetch('http://localhost:5001/sections/updateSeat', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          course_number: course_number,
+          section_index: index
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          setLoading(false);
+          if (data.error) {
+            alert(data.error);
+          } else {
+            setHasAdded(true);
+            // Save to localStorage
+            const addedCourses = JSON.parse(localStorage.getItem('addedCourses') || '[]');
+            if (!addedCourses.includes(course_number)) {
+              addedCourses.push(course_number);
+              localStorage.setItem('addedCourses', JSON.stringify(addedCourses));
+            }
+            fetchSections(); // Refresh data after backend updates
+          }
+        })
+        .catch(err => {
+          setLoading(false);
+          console.error('Error updating seat count:', err);
+          alert('Failed to update seats.');
+        });
+    } else {
+      alert('No seats available.');
+    }
+  };
+
+  const handleResetAddedCourses = () => {
+    localStorage.removeItem('addedCourses');
+    setHasAdded(false); // Reset the UI to allow adding again
+
+    // Reset seats to original values
+    const updatedSections = sections.map((section, index) => {
+      if (originalSeatCounts[index] !== undefined) {
+        section['Seat Available'] = originalSeatCounts[index];
+      }
+      return section;
+    });
+
+    setSections(updatedSections);
+
+    // Optionally, send the updated seat count to the backend if needed
+    updatedSections.forEach((section, index) => {
+      if (section['Seat Available'] !== originalSeatCounts[index]) {
+        fetch('http://localhost:5001/sections/updateSeat', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            course_number: course_number,
+            section_index: index
+          })
+        }).catch(err => console.error('Error resetting seats:', err));
+      }
+    });
+
+    alert('Added courses have been reset, and seats are restored.');
+    window.location.reload(); // Reload to reset state properly
+  };
 
   return (
     <div className="page">
@@ -38,25 +137,43 @@ function Sections() {
                 <strong>Meeting Time:</strong> {section['Meeting Time'] || 'N/A'} <br />
                 <strong>Days:</strong> {section['Day(s)'] || 'N/A'} <br />
                 <strong>Location:</strong> {section.Location || 'N/A'} <br />
-                <strong>Seats Available:</strong> {section['Seat Available'] || 'N/A'} <br />
+                <strong>Seats Available:</strong> {section['Seat Available']} <br />
                 <button
                   type="button"
+                  onClick={() => handleAddToSchedule(index)}
                   style={{
-                    backgroundColor: '#047857',
+                    backgroundColor: section['Seat Available'] > 0 && !hasAdded ? '#047857' : '#D1D5DB',
                     color: 'black',
                     border: 'none',
                     padding: '0.5rem 1rem',
                     borderRadius: '0.375rem',
-                    cursor: 'pointer',
+                    cursor: section['Seat Available'] > 0 && !hasAdded ? 'pointer' : 'not-allowed',
                     marginTop: '0.5rem'
                   }}
+                  disabled={section['Seat Available'] <= 0 || loading || hasAdded}
                 >
-                  Add to schedule
+                  {hasAdded ? 'Already Added' : loading ? 'Updating...' : 'Add to schedule'}
                 </button>
               </li>
             ))}
           </ul>
         )}
+
+        {/* Reset Added Courses Button for Debugging */}
+        <button
+          onClick={handleResetAddedCourses}
+          style={{
+            backgroundColor: '#D1D5DB',
+            color: 'black',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: '0.375rem',
+            cursor: 'pointer',
+            marginTop: '1rem'
+          }}
+        >
+          Reset Added Courses (Debugging)
+        </button>
 
         <Link to="/CourseSearch" className="back-button">Back to Search</Link>
       </div>
@@ -65,5 +182,4 @@ function Sections() {
 }
 
 export default Sections;
-
 
