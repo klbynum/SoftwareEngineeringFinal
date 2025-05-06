@@ -5,7 +5,6 @@ function Sections() {
   const { course_number } = useParams();
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [hasAdded, setHasAdded] = useState(false);
   const [originalSeatCounts, setOriginalSeatCounts] = useState({});
   const [studentId, setStudentId] = useState(null);
 
@@ -13,11 +12,6 @@ function Sections() {
     if (!course_number) return;
 
     fetchSections();
-
-    const addedCourses = JSON.parse(localStorage.getItem('addedCourses') || '[]');
-    if (addedCourses.includes(course_number)) {
-      setHasAdded(true);
-    }
 
     const storedStudentId = localStorage.getItem('StudentID');
     if (storedStudentId) {
@@ -42,11 +36,6 @@ function Sections() {
   };
 
   const handleAddToSchedule = (index) => {
-    if (hasAdded) {
-      alert('You have already added this course.');
-      return;
-    }
-
     const selectedSection = sections[index];
 
     if (selectedSection['Seat Available'] > 0) {
@@ -63,15 +52,7 @@ function Sections() {
           if (data.error) {
             alert(data.error);
           } else {
-            setHasAdded(true);
-            const addedCourses = JSON.parse(localStorage.getItem('addedCourses') || '[]');
-            if (!addedCourses.includes(course_number)) {
-              addedCourses.push(course_number);
-              localStorage.setItem('addedCourses', JSON.stringify(addedCourses));
-            }
-
-            postToSchedule(index);
-            fetchSections();
+            fetchSections(); // Refresh seats after update
           }
         })
         .catch(err => {
@@ -82,65 +63,6 @@ function Sections() {
     } else {
       alert('No seats available.');
     }
-  };
-
-  const postToSchedule = (index) => {
-    const selectedSection = sections[index];
-
-    const schedule = {
-      studentId,
-      courses: [
-        {
-          course_number: selectedSection.course_number,
-          section_index: selectedSection.section_index
-        }
-      ]
-    };
-
-    fetch('http://localhost:5001/schedule', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(schedule)
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.error) {
-          alert('Failed to save schedule: ' + data.error);
-        } else {
-          alert('Schedule saved successfully!');
-        }
-      })
-      .catch(err => {
-        console.error('Error saving schedule:', err);
-        alert('Failed to save schedule.');
-      });
-  };
-
-  const handleResetAddedCourses = () => {
-    localStorage.removeItem('addedCourses');
-    setHasAdded(false);
-
-    const updatedSections = sections.map((section, index) => {
-      if (originalSeatCounts[index] !== undefined) {
-        section['Seat Available'] = originalSeatCounts[index];
-      }
-      return section;
-    });
-
-    setSections(updatedSections);
-
-    updatedSections.forEach((section, index) => {
-      if (section['Seat Available'] !== originalSeatCounts[index]) {
-        fetch('http://localhost:5001/sections/updateSeat', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ course_number, section_index: index })
-        }).catch(err => console.error('Error resetting seats:', err));
-      }
-    });
-
-    alert('Added courses have been reset, and seats are restored.');
-    window.location.reload();
   };
 
   return (
@@ -167,37 +89,22 @@ function Sections() {
                   type="button"
                   onClick={() => handleAddToSchedule(index)}
                   style={{
-                    backgroundColor: section['Seat Available'] > 0 && !hasAdded ? '#047857' : '#D1D5DB',
+                    backgroundColor: section['Seat Available'] > 0 ? '#047857' : '#D1D5DB',
                     color: 'black',
                     border: 'none',
                     padding: '0.5rem 1rem',
                     borderRadius: '0.375rem',
-                    cursor: section['Seat Available'] > 0 && !hasAdded ? 'pointer' : 'not-allowed',
+                    cursor: section['Seat Available'] > 0 ? 'pointer' : 'not-allowed',
                     marginTop: '0.5rem'
                   }}
-                  disabled={section['Seat Available'] <= 0 || loading || hasAdded}
+                  disabled={section['Seat Available'] <= 0 || loading}
                 >
-                  {hasAdded ? 'Already Added' : loading ? 'Updating...' : 'Add to schedule'}
+                  {loading ? 'Updating...' : 'Add to schedule'}
                 </button>
               </li>
             ))}
           </ul>
         )}
-
-        <button
-          onClick={handleResetAddedCourses}
-          style={{
-            backgroundColor: '#D1D5DB',
-            color: 'black',
-            border: 'none',
-            padding: '0.5rem 1rem',
-            borderRadius: '0.375rem',
-            cursor: 'pointer',
-            marginTop: '1rem'
-          }}
-        >
-          Reset Added Courses (Debugging)
-        </button>
 
         <Link to="/CourseSearch" className="back-button">Back to Search</Link>
       </div>
