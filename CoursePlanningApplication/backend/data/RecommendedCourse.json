@@ -1,0 +1,63 @@
+{
+    "recommendations": [
+      {
+        "StudentID": "0657134",
+        "recommended_courses": [
+          {
+            "course_number": "CSC 372",
+            "course": "Data Structures"
+          },
+          {
+            "course_number": "CSC 292",
+            "course": "Unix and C Programming"
+          },
+          {
+            "course_number": "CSC 420",
+            "course": "Database Principles & Design"
+          },
+          {
+            "course_number": "CSC 361",
+            "course": "Survey of Programming Languages"
+          },
+          {
+            "course_number": "CSC 445",
+            "course": "Computer Network Defense"
+          },
+          {
+            "course_number": "CSC 435",
+            "course": "Computer Security"
+          }
+        ]
+      },
+      {
+        "StudentID": "0413840",
+        "recommended_courses": [
+          {
+            "course_number": "CSC 372",
+            "course": "Data Structures"
+          },
+          {
+            "course_number": "CSC 292",
+            "course": "Unix and C Programming"
+          },
+          {
+            "course_number": "CSC 420",
+            "course": "Database Principles & Design"
+          },
+          {
+            "course_number": "CSC 361",
+            "course": "Survey of Programming Languages"
+          },
+          {
+            "course_number": "CSC 445",
+            "course": "Computer Network Defense"
+          },
+          {
+            "course_number": "CSC 435",
+            "course": "Computer Security"
+          }
+        ]
+      }
+    ]
+  }
+  

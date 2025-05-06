@@ -8,10 +8,14 @@ function AcademicTracker() {
   const [trackCourses, setTrackCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [externalRecommendations, setExternalRecommendations] = useState([]);
   const [totalProgramCredits, setTotalProgramCredits] = useState(120);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
   const API_TIMEOUT = 8000; // 8 seconds timeout
+
+ 
+
 
   // Improved data fetching with retry logic, timeout, and better error handling
   const fetchDataWithRetry = useCallback(async (url, options = {}, attemptNumber = 1) => {
@@ -71,6 +75,23 @@ function AcademicTracker() {
         console.error("Error fetching student data:", studentErr);
         throw new Error(`Failed to fetch student data: ${studentErr.message}`);
       }
+      // Step 3: Fetch external recommendations
+      try {
+        const recData = await fetchDataWithRetry('http://localhost:5001/courseRec');
+        const studentRecs = recData.recommendations.find(
+          rec => rec.StudentID === studentDataResult.StudentRecords[0].StudentID
+        );
+
+        if (studentRecs?.recommended_courses) {
+          setExternalRecommendations(studentRecs.recommended_courses);
+        } else {
+          setExternalRecommendations([]);
+        }
+      } catch (recErr) {
+        console.error("Error fetching course recommendations:", recErr);
+        setExternalRecommendations([]);
+      }
+
       
       // Step 2: Fetch course data - separate try/catch
       try {
@@ -301,16 +322,11 @@ function AcademicTracker() {
     // For now, let's just show an alert, but you can replace this with actual functionality
     alert('Viewing Cybersecurity Track Details');
     
-    // You could implement more advanced functionality here, such as:
-    // - Opening a modal with detailed track information
-    // - Scrolling to a specific section
-    // - Navigating to a different page
-    // - Fetching additional track details from the API
   }, []);
 
   // Calculate all the data needed for rendering using memoized functions
   const progress = calculateProgress();
-  const recommendedCourses = getRecommendedCourses();
+  const recommendedCourses = externalRecommendations;
   const currentCourses = getCurrentCourses();
   const coursesBySemester = getCoursesGroupedBySemester();
   

@@ -19,6 +19,7 @@ const stuRecFile = './data/students.json';
 const courseSectionsFile = './data/courseSections.json';
 const courseTakenFile = './data/coursesTaken.json';
 const courseSchedule = './data/courseSchedule.json';
+const courseRecFile = './data/RecommendedCourse.json';
 
 // All Courses Route
 app.get('/all', (req, res) => {
@@ -90,6 +91,20 @@ app.get('/courseTaken', (req, res) => {
         try {
             const courTake = JSON.parse(data);
             res.json(courTake);
+        } catch (parseErr) {
+            console.error('Failed to parse track: ', parseErr);
+            res.status(500).json({ error: 'Invalid JSON format on sections json' });
+        }
+    });
+});
+app.get('/courseRec', (req, res) => {
+    fs.readFile(courseRecFile, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to read sections json' });
+        }
+        try {
+            const courRec = JSON.parse(data);
+            res.json(courRec);
         } catch (parseErr) {
             console.error('Failed to parse track: ', parseErr);
             res.status(500).json({ error: 'Invalid JSON format on sections json' });
