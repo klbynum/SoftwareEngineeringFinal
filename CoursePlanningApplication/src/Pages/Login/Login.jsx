@@ -47,7 +47,7 @@ const Login = () => {
       <div className="wrapper">
         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}aria-live="assertive">
         {errMsg} </p>
-        <h1>Sign in to (ADD A SITE TITLE)</h1>
+        <h1>Sign in to (NSU Course Planning Application)</h1>
         <form onSubmit={handleSubmit}>
           <div className="input-box">
             <FaUserAlt className="icon" />
