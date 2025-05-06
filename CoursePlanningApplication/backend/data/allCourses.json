@@ -1,0 +1,288 @@
+{
+    "AllCourses": [
+      {
+        "course_number": "SEM 101",
+        "course": "Spartan Seminar",
+        "credits": "1",
+        "prerequisite": "",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 101",
+        "course": "Introduction to the Comp Sci Profession",
+        "credits": "1",
+        "prerequisite": "",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 170",
+        "course": "Computer Programming I",
+        "credits": "3",
+        "prerequisite": "MTH 105",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 170L",
+        "course": "Computer Programming I Lab",
+        "credits": "1",
+        "prerequisite": "MTH 105",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "ENG 101",
+        "course": "College English",
+        "credits": "3",
+        "prerequisite": "",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "MTH 153",
+        "course": "College Algebra and Trigonometry",
+        "credits": "3",
+        "prerequisite": "",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "PED 100",
+        "course": "Fundamental of Fitness for Life",
+        "credits": "1",
+        "prerequisite": "",
+        "semester": "Fall"
+      },
+
+      {
+        "course_number": "CSC 260",
+        "course": "Computer Programming II",
+        "credits": "3",
+        "prerequisite": "CSC 170",
+        "semester":"Spring"
+      },
+      {
+        "course_number": "CSC 260L",
+        "course": "Computer Programming II Lab",
+        "credits": "1",
+        "prerequisite": "CSC 170",
+        "semester":"Spring"
+      },
+      {
+        "course_number": "MTH 184",
+        "course": "Calculus I",
+        "credits": "4",
+        "prerequisite": "",
+        "semester":"Spring"
+      },
+      {
+        "course_number": "ENG 102",
+        "course": "College English II",
+        "credits": "3",
+        "prerequisite": "",
+        "semester":"Spring"
+      },
+      {
+        "course_number": "HED 100",
+        "course": "Personal and Community Health",
+        "credits": "2",
+        "prerequisite": "",
+        "semester":"Spring"
+      },
+      {
+        "course_number": "SEM 102",
+        "course": "Spartan Seminar",
+        "credits": "1",
+        "prerequisite": "",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 372",
+        "course": "Data Structures",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "MTH 251",
+        "course": "Calculus II",
+        "credits": "4",
+        "prerequisite": "MTH 184",
+        "semester": "Spring"
+      },
+
+      {
+        "course_number": "MTH 371",
+        "course": "Discrete Mathematical Structures",
+        "credits": "4",
+        "prerequisite": "MTH 184"
+      },
+      {
+        "course_number": "CSC 268",
+        "course": "Computer Organization",
+        "credits": "3",
+        "prerequisite": "CSC 170",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 295",
+        "course": "Java Programming",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 275",
+        "course": "Fundamentals of Cybersecurity",
+        "credits": "3",
+        "prerequisite": "",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "ENG 303",
+        "course": "Technical Writing",
+        "credits": "3",
+        "prerequisite": "ENG 102",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "ENG 285",
+        "course": "Principles of Speech",
+        "credits": "3",
+        "prerequisite": "ENG 102",
+        "semester": "Spring"
+      },
+
+    
+      {
+        "course_number": "CSC 292",
+        "course": "Unix and C Programming",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 380",
+        "course": "Software Engineering",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 430",
+        "course": "Data Communication",
+        "credits": "3",
+        "prerequisite": "CSC 372",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "MTH 351",
+        "course": "Probability and Statistics I",
+        "credits": "3",
+        "prerequisite": "MTH 251",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 449",
+        "course": "Cryptography and Network Security",
+        "credits": "3",
+        "prerequisite": "",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 420",
+        "course": "Database Principles & Design",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 361",
+        "course": "Survey of Programming Languages",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Spring"
+      },
+
+      {
+        "course_number": "CSC 445",
+        "course": "Computer Network Defense",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 498",
+        "course": "Senior Seminar I",
+        "credits": "2",
+        "prerequisite": "",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 464",
+        "course": "Operating Systems",
+        "credits": "3",
+        "prerequisite": "CSC 372",
+        "semester": "Fall"
+      },
+      {
+        "course_number": "CSC 313",
+        "course": "Network Administration",
+        "credits": "3",
+        "prerequisite": "",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 468",
+        "course": "Computer Architecture",
+        "credits": "3",
+        "prerequisite": "CSC 268",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 499",
+        "course": "Senior Seminar II",
+        "credits": "2",
+        "prerequisite": "CSC 498",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 494",
+        "course": "Digital Forensics",
+        "credits": "3",
+        "prerequisite": "",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 487",
+        "course": "Engineering Secure Software Systems",
+        "credits": "3",
+        "prerequisite": "CSC 380"
+      },
+      {
+        "course_number": "CSC 488",
+        "course": "Principles of Distributed Software Systems",
+        "credits": "3",
+        "prerequisite": "CSC 464",
+        "semester": "Spring"
+      },
+      {
+        "course_number": "CSC 486",
+        "course": "Software Project Management",
+        "credits": "3",
+        "prerequisite": "CSC 380"
+      },
+      {
+        "course_number": "CSC 485",
+        "course": "Software Quality Assurance & Testing",
+        "credits": "3",
+        "prerequisite": "CSc 380"
+      },
+      {
+        "course_number": "CSC 435",
+        "course": "Computer Security",
+        "credits": "3",
+        "prerequisite": "CSC 260",
+        "semester": "Fall"
+      }
+
+
+
+    ]
+  }

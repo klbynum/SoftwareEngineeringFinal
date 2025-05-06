@@ -90,7 +90,9 @@ function Home() {
           <div className="progress-tracker">
             <div className="progress-info">
               <span className="progress-label">Credits Completed</span>
-              <span className="progress-value">{studentInfo.creditsCompleted} of {studentInfo.totalCredits}</span>
+              <span className="progress-value">
+                {studentInfo.creditsCompleted} of {studentInfo.totalCredits}
+              </span>
             </div>
             <div className="progress-bar-container">
               <div 

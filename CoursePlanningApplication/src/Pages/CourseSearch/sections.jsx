@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-function sections() {
+function Sections() {
   const { course_number } = useParams();
   const [sections, setSections] = useState([]);
 
@@ -37,7 +37,22 @@ function sections() {
                 <strong>Professor:</strong> {section.Professor || 'N/A'} <br />
                 <strong>Meeting Time:</strong> {section['Meeting Time'] || 'N/A'} <br />
                 <strong>Days:</strong> {section['Day(s)'] || 'N/A'} <br />
-                <strong>Seats Available:</strong> {section['Seat Available'] || 'N/A'}
+                <strong>Location:</strong> {section.Location || 'N/A'} <br />
+                <strong>Seats Available:</strong> {section['Seat Available'] || 'N/A'} <br />
+                <button
+                  type="button"
+                  style={{
+                    backgroundColor: '#047857',
+                    color: 'black',
+                    border: 'none',
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.375rem',
+                    cursor: 'pointer',
+                    marginTop: '0.5rem'
+                  }}
+                >
+                  Add to schedule
+                </button>
               </li>
             ))}
           </ul>
@@ -49,4 +64,6 @@ function sections() {
   );
 }
 
-export default sections;
+export default Sections;
+
+

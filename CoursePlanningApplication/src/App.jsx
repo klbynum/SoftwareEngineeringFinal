@@ -16,7 +16,7 @@ export default function App() {
           <Route path="Login" element={<Login />} />
           <Route path="AcademicTracker" element={<AcademicTracker />} />
           <Route path="CourseSearch" element={<CourseSearch />} />
-          <Route path="/sections/:courseId" element={<Sections />} />
+          <Route path="/sections/:course_number" element={<Sections />} />
         </Route>
       </Routes>
     </BrowserRouter>

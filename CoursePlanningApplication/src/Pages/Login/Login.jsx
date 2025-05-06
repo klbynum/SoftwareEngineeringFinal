@@ -1,45 +1,71 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Login.css';
-import '../Home/Home.css';
-import { FaUserAlt, FaLock } from "react-icons/fa";
-import {useRef, useState, useEffect, useContext } from 'react';
-import { data } from 'react-router-dom';
-const LOGIN_URL = '/auth';
+import { FaUserAlt, FaLock } from 'react-icons/fa';
+
+const LOGIN_URL = 'http://localhost:5001/auth'; // Change this URL as per your backend setup
 
 const Login = () => {
-  //const { setAuth } = useContext(AuthContext);
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false); 
+  const [success, setSuccess] = useState(false);
 
-  useEffect (() => {
+  useEffect(() => {
     userRef.current?.focus();
-  }, [])
+  }, []);
 
-  useEffect (() => {
+  useEffect(() => {
     setErrMsg('');
-  }, [user, pwd])
+  }, [user, pwd]);
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Clear error messages
+    setErrMsg('');
+
+    try {
+      const response = await fetch(LOGIN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: user,
+          password: pwd,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Successfully logged in
+        setFirstName(data.student.firstName); // Assuming the first name is part of the response
+        setSuccess(true);
+      } else {
+        // Display error message
+        setErrMsg(data.error || 'Login failed');
+      }
+    } catch (error) {
+      setErrMsg('Server error');
+    }
+
     setUser('');
     setPwd('');
-    setSuccess(true);
-  }
+  };
 
   return (
     <>
       {success ? (
         <section>
-          <h1>You are logged in!</h1>
-          <br />
+          <h1>You are logged in, {firstName}!</h1> {/* Display the first name here */}
           <p>
-            <Link to="/" >Go to Home</Link>
+            <Link to="/">Go to Home</Link>
           </p>
         </section>
       ) : (
@@ -62,28 +88,10 @@ const Login = () => {
               placeholder='Username'
             />
           </div>
-          <div className="input-box">
-            <FaLock className="icon" />
-            <input 
-              type="password" 
-              id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
-              required
-              placeholder='Password'
-            />
-          </div>
-          <div className="rememLabel">
-            <a hfref="#">Forgot Password</a>
-          </div>
-          <button type="submit">Log In</button>
-        </form>
-      </div>
-    </div>
+        </div>
       )}
-      </>
+    </>
   );
-  
 };
 
-export default Login
+export default Login;
