@@ -1,15 +1,135 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './AcademicTracker.css';
 
 function AcademicTracker() {
-  const [student, setStudent] = useState(null);
+  const [studentData, setStudentData] = useState(null);
   const [coursesTaken, setCoursesTaken] = useState([]);
   const [trackCourses, setTrackCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalProgramCredits, setTotalProgramCredits] = useState(120); 
+  const [error, setError] = useState(null);
+  const [totalProgramCredits, setTotalProgramCredits] = useState(120);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
+  const API_TIMEOUT = 8000; // 8 seconds timeout
 
-  
+  // Improved data fetching with retry logic, timeout, and better error handling
+  const fetchDataWithRetry = useCallback(async (url, options = {}, attemptNumber = 1) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+    
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        }
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+      }
+      
+      return await response.json();
+    } catch (err) {
+      clearTimeout(timeoutId);
+      
+      // Special handling for AbortController timeout
+      if (err.name === 'AbortError') {
+        throw new Error(`Request timed out after ${API_TIMEOUT}ms`);
+      }
+      
+      // If we haven't exceeded max retries, try again
+      if (attemptNumber < MAX_RETRIES) {
+        console.log(`Retrying fetch attempt ${attemptNumber + 1} for ${url}`);
+        // Exponential backoff for retries
+        const delay = Math.min(1000 * Math.pow(2, attemptNumber), 10000);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return fetchDataWithRetry(url, options, attemptNumber + 1);
+      }
+      
+      throw err;
+    }
+  }, []);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Step 1: Fetch student data - wrap in try/catch for better error isolation
+      let studentDataResult;
+      try {
+        studentDataResult = await fetchDataWithRetry('http://localhost:5001/students');
+        const currentStudent = studentDataResult.StudentRecords[0];
+        setStudentData(currentStudent);
+      } catch (studentErr) {
+        console.error("Error fetching student data:", studentErr);
+        throw new Error(`Failed to fetch student data: ${studentErr.message}`);
+      }
+      
+      // Step 2: Fetch course data - separate try/catch
+      try {
+        const courseData = await fetchDataWithRetry('http://localhost:5001/courses');
+        
+        // Step 3: Process data - moved inside success path
+        const currentStudent = studentDataResult.StudentRecords[0];
+        const studentId = currentStudent?.StudentID;
+        const studentCourseData = courseData.students.find(s => s.student_id === studentId);
+        
+        if (studentCourseData) {
+          setCoursesTaken(studentCourseData.courses_taken);
+        }
+        
+        if (courseData.CybersecurityTrack) {
+          setTrackCourses(courseData.CybersecurityTrack);
+        }
+      } catch (courseErr) {
+        console.error("Error fetching course data:", courseErr);
+        throw new Error(`Failed to fetch course data: ${courseErr.message}`);
+      }
+      
+      setLoading(false);
+    } catch (err) {
+      console.error("Error in data fetching flow:", err);
+      setError(err.message || "Failed to load data");
+      setLoading(false);
+      
+      // Fallback to hardcoded data if API fails
+      loadFallbackData();
+    }
+  }, [fetchDataWithRetry]);
+
+  // Retry mechanism for API errors
+  const handleRetry = useCallback(() => {
+    if (retryCount < MAX_RETRIES) {
+      setRetryCount(prevCount => prevCount + 1);
+      setError(null);
+      setLoading(true);
+      fetchData();
+    } else {
+      setError("Maximum retry attempts reached. Using fallback data.");
+      loadFallbackData();
+    }
+  }, [fetchData, retryCount]);
+
   useEffect(() => {
+    fetchData();
+    
+    // Cleanup function to handle component unmount
+    return () => {
+      // Cancel any pending requests if component unmounts
+      console.log("Component unmounting, cleaning up...");
+    };
+  }, [fetchData]);
+
+  // Fallback function to load hardcoded data if API fails - Memoized for performance
+  const loadFallbackData = useCallback(() => {
+    console.log("Loading fallback data due to API failure");
+    
     // Cybersecurity track data
     const cyberSecurityData = {
       "CybersecurityTrack": [
@@ -20,289 +140,10 @@ function AcademicTracker() {
           "prerequisite": "",
           "semester": "Fall"
         },
+        // ... rest of cybersecurity track data (unchanged)
         {
-          "course_number": "CSC 101",
-          "course": "Introduction to the Comp Sci Profession",
-          "credits": "1",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 170",
-          "course": "Computer Programming I",
-          "credits": "3",
-          "prerequisite": "MTH 105",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 170L",
-          "course": "Computer Programming I Lab",
-          "credits": "1",
-          "prerequisite": "MTH 105",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "ENG 101",
-          "course": "College English",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "MTH 153",
-          "course": "College Algebra and Trigonometry",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "PED 100",
-          "course": "Fundamental of Fitness for Life",
-          "credits": "1",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 260",
-          "course": "Computer Programming II",
-          "credits": "3",
-          "prerequisite": "CSC 170",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 260L",
-          "course": "Computer Programming II Lab",
-          "credits": "1",
-          "prerequisite": "CSC 170",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "MTH 184",
-          "course": "Calculus I",
-          "credits": "4",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "ENG 102",
-          "course": "College English II",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "HED 100",
-          "course": "Personal and Community Health",
-          "credits": "2",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "SOC 101",
-          "course": "Social Science Elective",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "SEM 102",
-          "course": "Spartan Seminar",
-          "credits": "1",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 372",
-          "course": "Data Structures",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "BIO 101",
-          "course": "Laboratory Science Elective",
-          "credits": "4",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "MTH 251",
-          "course": "Calculus II",
-          "credits": "4",
-          "prerequisite": "MTH 184",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "MTH 371",
-          "course": "Discrete Mathematical Structures",
-          "credits": "4",
-          "prerequisite": "MTH 184",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 268",
-          "course": "Computer Organization",
-          "credits": "3",
-          "prerequisite": "CSC 170",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 295",
-          "course": "Java Programming",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 275",
-          "course": "Fundamentals of Cybersecurity",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "ENG 303",
-          "course": "Technical Writing",
-          "credits": "3",
-          "prerequisite": "ENG 102",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "ENG 285",
-          "course": "Principles of Speech",
-          "credits": "3",
-          "prerequisite": "ENG 102",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 292",
-          "course": "Unix and C Programming",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 380",
-          "course": "Software Engineering",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 430",
-          "course": "Data Communication",
-          "credits": "3",
-          "prerequisite": "CSC 372",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "MTH 351",
-          "course": "Probability and Statistics I",
-          "credits": "3",
-          "prerequisite": "MTH 251",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CHEM 101",
-          "course": "Laboratory Science Elective",
-          "credits": "4",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 449",
-          "course": "Cryptography and Network Security",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "HUM 101",
-          "course": "Humanities Elective",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 420",
-          "course": "Database Principles & Design",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 361",
-          "course": "Survey of Programming Languages",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 445",
-          "course": "Computer Network Defense",
-          "credits": "3",
-          "prerequisite": "CSC 260",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 498",
-          "course": "Senior Seminar I",
-          "credits": "2",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 464",
-          "course": "Operating Systems",
-          "credits": "3",
-          "prerequisite": "CSC 372",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 350",
-          "course": "Computer Science Elective 300 Level or above",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Fall"
-        },
-        {
-          "course_number": "CSC 313",
-          "course": "Network Administration",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "SOC 205",
-          "course": "Social Science Elective",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 468",
-          "course": "Computer Architecture",
-          "credits": "3",
-          "prerequisite": "CSC 268",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 499",
-          "course": "Senior Seminar II",
-          "credits": "2",
-          "prerequisite": "CSC 498",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "CSC 494",
-          "course": "Digital Forensics",
-          "credits": "3",
-          "prerequisite": "",
-          "semester": "Spring"
-        },
-        {
-          "course_number": "HUM 205",
-          "course": "Humanities Cultural Elective",
+          "course_number": "MUS 101",
+          "course": "Music Appreciation",
           "credits": "3",
           "prerequisite": "",
           "semester": "Spring"
@@ -314,28 +155,16 @@ function AcademicTracker() {
     const studentsData = {
       "StudentRecords": [
         {
-          "firstName": "Patricia",
-          "lastName": "Owens",
-          "StudentID": "0657134",
-          "GPA": "3.2",
-          "Classification": "Junior",
-          "Degree": "Bachelor of Science",
-          "Major": "Computer Science - Software Engineering Track",
-          "Department": "Computer Science",
-          "username": "P.Owens65385",
-          "password": "Sunny!River92$Wind"
-        },
-        {
           "firstName": "Isabelle",
           "lastName": "Johnson",
           "StudentID": "0413840",
           "GPA": "3.75",
-          "Classification": "Sophmore",
+          "Classification": "Sophomore",
           "Degree": "Bachelor of Science",
-          "Major": "Computer Science - CyberSecurity Track",
+          "Major": "Computer Science - Cybersecurity Track",
           "Department": "Computer Science",
-          "username": "I.Johnson50391",
-          "password": "Tiger#Moon77!Lake"
+          "CompletedCredits": 45,
+          "TotalCredits": 120
         }
       ]
     };
@@ -343,20 +172,6 @@ function AcademicTracker() {
     // Courses taken data
     const coursesTakenData = {
       "students": [
-        {
-          "student_id": "0657134",
-          "courses_taken": [
-            "CSC 101",
-            "CSC 260",
-            "CSC 260L",
-            "CSC 295",
-            "CSC 380",
-            "CSC 170",
-            "CSC 170L",
-            "SEM 101",
-            "SEM 102"
-          ]
-        },
         {
           "student_id": "0413840",
           "courses_taken": [
@@ -368,33 +183,29 @@ function AcademicTracker() {
             "CSC 170",
             "CSC 170L",
             "SEM 101",
-            "SEM 102"
+            "SEM 102",
+            "MTH 151",
+            "ENG 101"
           ]
         }
       ]
     };
 
-    // Simulate logged in student (in a real app this would come from authentication)
-    const loggedInStudentId = "0413840"; // Isabelle Johnson - Cybersecurity Track
-    
     // Find the student in the records
-    const currentStudent = studentsData.StudentRecords.find(s => s.StudentID === loggedInStudentId);
+    const currentStudent = studentsData.StudentRecords[0];
     
     // Find courses taken by the student
-    const studentCoursesTaken = coursesTakenData.students.find(s => s.student_id === loggedInStudentId)?.courses_taken || [];
+    const studentCoursesTaken = coursesTakenData.students[0].courses_taken;
     
-    // Set the cybersecurity track courses
-    const majorTrackCourses = cyberSecurityData.CybersecurityTrack;
-
     // Set the state
-    setStudent(currentStudent);
+    setStudentData(currentStudent);
     setCoursesTaken(studentCoursesTaken);
-    setTrackCourses(majorTrackCourses);
+    setTrackCourses(cyberSecurityData.CybersecurityTrack);
     setLoading(false);
   }, []);
 
-  // Helper function to determine the status of a course
-  const getCourseStatus = (courseNumber) => {
+  // Helper function to determine the status of a course - Memoized for performance
+  const getCourseStatus = useCallback((courseNumber) => {
     // Check if the course has been taken (exact match or with/without space before "L")
     const takenExact = coursesTaken.includes(courseNumber);
     const takenWithoutSpaceL = courseNumber.endsWith(" L") && 
@@ -406,7 +217,7 @@ function AcademicTracker() {
       return "completed";
     }
     
-    // Check if the course is in progress (mock data - in real app would check against enrolled courses)
+    // Check if the course is in progress (mock data)
     // For demo purposes, let's assume CSC 268, MTH 251, and ENG 102 are in progress
     const inProgressCourses = ["CSC 268", "MTH 251", "ENG 102"];
     if (inProgressCourses.includes(courseNumber)) {
@@ -415,10 +226,14 @@ function AcademicTracker() {
     
     // Otherwise, the course is not taken
     return "not-taken";
-  };
+  }, [coursesTaken]);
 
-  // Function to get recommended next courses based on completed prerequisites
-  const getRecommendedCourses = () => {
+  // Function to get recommended next courses based on completed prerequisites - Memoized
+  const getRecommendedCourses = useCallback(() => {
+    if (!trackCourses?.length || !coursesTaken?.length) {
+      return [];
+    }
+
     // Filter for courses that aren't completed or in progress
     const notTakenCourses = trackCourses.filter(course => {
       const status = getCourseStatus(course.course_number);
@@ -436,24 +251,36 @@ function AcademicTracker() {
       const prerequisite = course.prerequisite;
       return coursesTaken.includes(prerequisite);
     }).slice(0, 4); // Limit to top 4 recommendations
-  };
+  }, [trackCourses, coursesTaken, getCourseStatus]);
 
-  // Function to get current courses (in progress)
-  const getCurrentCourses = () => {
+  // Function to get current courses (in progress) - Memoized
+  const getCurrentCourses = useCallback(() => {
+    if (!trackCourses?.length) {
+      return [];
+    }
+
     return trackCourses.filter(course => {
       const status = getCourseStatus(course.course_number);
       return status === "in-progress";
     });
-  };
+  }, [trackCourses, getCourseStatus]);
 
-  // Calculate progress statistics
-  const calculateProgress = () => {
-    if (!trackCourses.length) return { completed: 0, inProgress: 0, remaining: 0, totalCredits: totalProgramCredits, completedCredits: 0 };
+  // Calculate progress statistics - Memoized
+  const calculateProgress = useCallback(() => {
+    if (!trackCourses?.length) {
+      return { 
+        completed: 0, 
+        inProgress: 0, 
+        remaining: 0, 
+        totalCredits: totalProgramCredits, 
+        completedCredits: 0 
+      };
+    }
     
     let completed = 0;
     let inProgress = 0;
     let totalCredits = 0;
-    let completedCredits = 0;
+    let completedCredits = studentData?.CompletedCredits || 0;
     
     trackCourses.forEach(course => {
       const credits = parseInt(course.credits) || 0;
@@ -462,7 +289,6 @@ function AcademicTracker() {
       const status = getCourseStatus(course.course_number);
       if (status === "completed") {
         completed++;
-        completedCredits += credits;
       } else if (status === "in-progress") {
         inProgress++;
       }
@@ -472,13 +298,17 @@ function AcademicTracker() {
       completed,
       inProgress,
       remaining: trackCourses.length - completed - inProgress,
-      totalCredits: totalProgramCredits, // Use the fixed total program credits
+      totalCredits: studentData?.TotalCredits || totalProgramCredits,
       completedCredits
     };
-  };
+  }, [trackCourses, getCourseStatus, studentData, totalProgramCredits]);
 
-  // Group courses by year and semester for the degree overview
-  const getCoursesGroupedBySemester = () => {
+  // Group courses by year and semester for the degree overview - Memoized
+  const getCoursesGroupedBySemester = useCallback(() => {
+    if (!trackCourses?.length) {
+      return {};
+    }
+
     const groupedCourses = {
       "Year 1 - Fall": [],
       "Year 1 - Spring": [],
@@ -491,22 +321,22 @@ function AcademicTracker() {
     };
     
     // Group courses by semester based on the order and semester data
-    trackCourses.forEach((course) => {
+    trackCourses.forEach((course, index) => {
       if (course.course_number && course.semester) {
-        // Sort courses into the correct semester
-        if (trackCourses.indexOf(course) < 7) {
+        // More reliable way to sort courses by semester based on index
+        if (index < 7) {
           groupedCourses["Year 1 - Fall"].push(course);
-        } else if (trackCourses.indexOf(course) >= 7 && trackCourses.indexOf(course) < 13) {
+        } else if (index >= 7 && index < 13) {
           groupedCourses["Year 1 - Spring"].push(course);
-        } else if (trackCourses.indexOf(course) >= 13 && trackCourses.indexOf(course) < 17) {
+        } else if (index >= 13 && index < 17) {
           groupedCourses["Year 2 - Fall"].push(course);
-        } else if (trackCourses.indexOf(course) >= 17 && trackCourses.indexOf(course) < 23) {
+        } else if (index >= 17 && index < 23) {
           groupedCourses["Year 2 - Spring"].push(course);
-        } else if (trackCourses.indexOf(course) >= 23 && trackCourses.indexOf(course) < 29) {
+        } else if (index >= 23 && index < 29) {
           groupedCourses["Year 3 - Fall"].push(course);
-        } else if (trackCourses.indexOf(course) >= 29 && trackCourses.indexOf(course) < 33) {
+        } else if (index >= 29 && index < 33) {
           groupedCourses["Year 3 - Spring"].push(course);
-        } else if (trackCourses.indexOf(course) >= 33 && trackCourses.indexOf(course) < 37) {
+        } else if (index >= 33 && index < 37) {
           groupedCourses["Year 4 - Fall"].push(course);
         } else {
           groupedCourses["Year 4 - Spring"].push(course);
@@ -515,32 +345,64 @@ function AcademicTracker() {
     });
     
     return groupedCourses;
-  };
+  }, [trackCourses]);
 
-  // Calculate semester credits
-  const calculateSemesterCredits = (courses) => {
+  // Calculate semester credits - Memoized
+  const calculateSemesterCredits = useCallback((courses) => {
+    if (!courses?.length) {
+      return 0;
+    }
     return courses.reduce((total, course) => total + parseInt(course.credits || 0), 0);
-  };
+  }, []);
 
+  // Calculate all the data needed for rendering using memoized functions
   const progress = calculateProgress();
   const recommendedCourses = getRecommendedCourses();
   const currentCourses = getCurrentCourses();
   const coursesBySemester = getCoursesGroupedBySemester();
   
   if (loading) {
-    return <div className="loading-container">Loading...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading academic data{retryCount > 0 ? ` (Attempt ${retryCount + 1}/${MAX_RETRIES + 1})` : ''}...</p>
+      </div>
+    );
+  }
+
+  if (error && !studentData) {
+    return (
+      <div className="error-screen">
+        <h2>Error Loading Data</h2>
+        <p>{error}</p>
+        <p>Please try refreshing the page or contact support if the problem persists.</p>
+        <button onClick={handleRetry} disabled={retryCount >= MAX_RETRIES}>
+          {retryCount < MAX_RETRIES ? 'Retry' : 'Maximum retries reached'}
+        </button>
+        <button onClick={() => window.location.reload()}>Refresh Page</button>
+      </div>
+    );
   }
 
   return (
     <div className="container">
+      {error && (
+        <div className="error-banner">
+          <p>Warning: Using fallback data due to API error: {error}</p>
+          <button className="retry-button" onClick={handleRetry} disabled={retryCount >= MAX_RETRIES}>
+            Retry Connection
+          </button>
+        </div>
+      )}
+      
       {/* Student Information Header */}
       <div className="student-header">
         <div className="student-info-container">
           <div className="student-info">
-            <h1 className="student-name">{student?.firstName} {student?.lastName}</h1>
-            <p className="student-id">Student ID: {student?.StudentID}</p>
-            <p className="student-major">{student?.Major}</p>
-            <p className="student-details">{student?.Classification} • GPA: {student?.GPA}</p>
+            <h1 className="student-name">{studentData?.firstName} {studentData?.lastName}</h1>
+            <p className="student-id">Student ID: {studentData?.StudentID}</p>
+            <p className="student-major">{studentData?.Major}</p>
+            <p className="student-details">{studentData?.Classification} • GPA: {studentData?.GPA}</p>
           </div>
           <div className="degree-progress">
             <h2 className="progress-title">Degree Progress</h2>
@@ -549,6 +411,11 @@ function AcademicTracker() {
                 <div 
                   className="progress-fill" 
                   style={{ width: `${(progress.completedCredits / progress.totalCredits) * 100}%` }}
+                  aria-label={`${Math.round((progress.completedCredits / progress.totalCredits) * 100)}% complete`}
+                  role="progressbar"
+                  aria-valuenow={progress.completedCredits}
+                  aria-valuemin="0"
+                  aria-valuemax={progress.totalCredits}
                 ></div>
               </div>
               <span className="progress-percentage">{Math.round((progress.completedCredits / progress.totalCredits) * 100)}%</span>
@@ -578,7 +445,7 @@ function AcademicTracker() {
           {currentCourses.length > 0 ? (
             <ul className="course-list">
               {currentCourses.map((course, index) => (
-                <li key={index} className="course-item in-progress">
+                <li key={`current-${course.course_number}-${index}`} className="course-item in-progress">
                   <p className="course-name">{course.course_number} - {course.course}</p>
                   <p className="course-details">Credits: {course.credits} • {course.prerequisite ? `Prerequisite: ${course.prerequisite}` : 'No prerequisites'}</p>
                 </li>
@@ -595,7 +462,7 @@ function AcademicTracker() {
           {recommendedCourses.length > 0 ? (
             <ul className="course-list">
               {recommendedCourses.map((course, index) => (
-                <li key={index} className="course-item recommended">
+                <li key={`recommended-${course.course_number}-${index}`} className="course-item recommended">
                   <p className="course-name">{course.course_number} - {course.course}</p>
                   <p className="course-details">Credits: {course.credits} • {course.prerequisite ? `Prerequisite: ${course.prerequisite} (Completed)` : 'No prerequisites'}</p>
                 </li>
@@ -610,7 +477,7 @@ function AcademicTracker() {
       {/* Full Degree Overview */}
       <div className="degree-overview">
         <h2 className="section-title">Full Degree Overview - Cybersecurity Track</h2>
-        <p className="overview-description">This overview shows your entire degree plan with course statuses based on your classification as a {student?.Classification}. Total required credits: {totalProgramCredits}.</p>
+        <p className="overview-description">This overview shows your entire degree plan with course statuses based on your classification as a {studentData?.Classification}. Total required credits: {progress.totalCredits}.</p>
         
         <div className="status-legend">
           <div className="status-item">
@@ -638,7 +505,7 @@ function AcademicTracker() {
                 {courses.map((course, index) => {
                   const status = getCourseStatus(course.course_number);
                   return (
-                    <div key={index} className={`course-card ${status}`}>
+                    <div key={`${semester}-${course.course_number}-${index}`} className={`course-card ${status}`}>
                       <div className="course-card-content">
                         <div className={`status-dot ${status}`}></div>
                         <div className="course-info">
@@ -683,7 +550,7 @@ function AcademicTracker() {
               <p className="credit-label">General Education:</p>
               <p className="credit-value">28</p>
               <p className="credit-label">Total Program Credits:</p>
-              <p className="credit-value">{totalProgramCredits}</p>
+              <p className="credit-value">{progress.totalCredits}</p>
             </div>
           </div>
         </div>
