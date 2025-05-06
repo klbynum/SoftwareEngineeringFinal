@@ -301,11 +301,6 @@ function AcademicTracker() {
     // For now, let's just show an alert, but you can replace this with actual functionality
     alert('Viewing Cybersecurity Track Details');
     
-    // You could implement more advanced functionality here, such as:
-    // - Opening a modal with detailed track information
-    // - Scrolling to a specific section
-    // - Navigating to a different page
-    // - Fetching additional track details from the API
   }, []);
 
   // Calculate all the data needed for rendering using memoized functions
