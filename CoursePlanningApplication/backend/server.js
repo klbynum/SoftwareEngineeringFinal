@@ -199,7 +199,6 @@ app.put('/sections/updateSeat', (req, res) => {
     });
 });
 
-
 app.post('/auth', (req, res) => {
     const { username, password } = req.body;
 
