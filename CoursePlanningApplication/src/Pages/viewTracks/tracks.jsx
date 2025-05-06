@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '/Users/kemonbynum/Desktop/myPlayground/SoftwareEngineeringFinal/CoursePlanningApplication/src/AuthContext.jsx'; // Importing the AuthContext
+import { useAuth } from '../../AuthContext';
 //import './trackSearch.css';
 
 function TrackSearch() {
