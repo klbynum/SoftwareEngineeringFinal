@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import './AcademicTracker.css';
 
 function AcademicTracker() {
@@ -477,13 +478,6 @@ function AcademicTracker() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* View Track Button - Added here */}
-        <div className="view-track-button-container">
-          <button className="view-track-button" onClick={handleViewTrackClick}>
-            View Track Details
-          </button>
         </div>
       </div>
       
