@@ -6,6 +6,8 @@ import Login from "./Pages/Login/Login.jsx";
 import AcademicTracker from "./Pages/AcademicTracker/AcademicTracker.jsx";
 import CourseSearch from "./Pages/CourseSearch/CourseSearch.jsx";
 import Sections from './Pages/CourseSearch/Sections.jsx';
+import Track from './Pages/viewTracks/tracks.jsx';
+
 
 export default function App() {
   return (
@@ -17,6 +19,7 @@ export default function App() {
           <Route path="AcademicTracker" element={<AcademicTracker />} />
           <Route path="CourseSearch" element={<CourseSearch />} />
           <Route path="/sections/:course_number" element={<Sections />} />
+          <Route path="/Track" element={<Track />} />
         </Route>
       </Routes>
     </BrowserRouter>
