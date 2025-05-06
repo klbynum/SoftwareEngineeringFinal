@@ -1,62 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Award, 
   Book, 
   BookOpen, 
   Calendar, 
-  Bell,
-  FileText
+  Bell, 
+  FileText 
 } from 'lucide-react';
 import './Home.css';
+import { useAuth } from '../../AuthContext'; // adjust path if needed
 
 function Home() {
-  const [studentData, setStudentData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { student } = useAuth();
 
-  // Fetch student data from backend
+  const [academicInfo, setAcademicInfo] = useState({
+    GPA: null,
+    Classification: '',
+    Major: '',
+    Degree: ''
+  });
+
   useEffect(() => {
-    // Assuming your server is running on localhost:5001
-    fetch('http://localhost:5001/students')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch student data');
+    const fetchAcademicInfo = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/students');
+        if (!response.ok) throw new Error('Failed to fetch academic info');
+
+        const data = await response.json();
+        const match = data.StudentRecords?.find(
+          record => record.StudentID === student.StudentID
+        );
+
+        if (match) {
+          setAcademicInfo({
+            GPA: match.GPA,
+            Classification: match.Classification,
+            Major: match.Major,
+            Degree: match.Degree
+          });
         }
-        return response.json();
-      })
-      .then((data) => {
-        setStudentData(data.StudentRecords[0]); // Use the first student for now
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+      } catch (err) {
+        console.error('Error fetching academic info:', err);
+      }
+    };
 
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
+    if (student?.StudentID) {
+      fetchAcademicInfo();
+    }
+  }, [student]);
 
-  if (error) {
-    return <div className="error-screen">Error: {error}</div>;
+  if (!student) {
+    return <div className="loading-screen">Loading student data...</div>;
   }
 
   // Calculate progress percentage
-  const completedCredits = studentData?.CompletedCredits || 0;
-  const totalCredits = studentData?.TotalCredits || 120; // Default to 120 if not provided
+  const completedCredits = student.CompletedCredits || 0;
+  const totalCredits = student.TotalCredits || 120;
   const progressPercentage = Math.round((completedCredits / totalCredits) * 100);
 
   return (
     <div className="page">
-      {/* Main Content */}
       <main>
-        {/* Welcome Section */}
         <section className="welcome-section">
-          <h1 className="welcome-heading">Welcome, {studentData?.firstName} {studentData?.lastName}!</h1>
+          <h1 className="welcome-heading">Welcome, {student.firstName} {student.lastName}!</h1>
           <p className="welcome-text">Explore your academic resources and plan your courses.</p>
 
-          {/* Progress Tracker */}
           <div className="progress-container">
             <div className="progress-tracker">
               <div className="progress-info">
@@ -72,13 +80,12 @@ function Home() {
               <span className="progress-percentage">{progressPercentage}% Complete</span>
             </div>
 
-            {/* Student Info Cards */}
             <div className="student-info-grid">
               <div className="info-card">
                 <Award className="info-icon" />
                 <div className="info-details">
                   <span className="info-label">GPA</span>
-                  <span className="info-value">{studentData?.GPA || "N/A"}</span>
+                  <span className="info-value">{academicInfo.GPA || "N/A"}</span>
                 </div>
               </div>
               
@@ -86,7 +93,7 @@ function Home() {
                 <Book className="info-icon" />
                 <div className="info-details">
                   <span className="info-label">Degree</span>
-                  <span className="info-value">{studentData?.Degree || "N/A"}</span>
+                  <span className="info-value">{academicInfo.Degree || "N/A"}</span>
                 </div>
               </div>
               
@@ -94,7 +101,7 @@ function Home() {
                 <BookOpen className="info-icon" />
                 <div className="info-details">
                   <span className="info-label">Major</span>
-                  <span className="info-value">{studentData?.Major || "N/A"}</span>
+                  <span className="info-value">{academicInfo.Major || "N/A"}</span>
                 </div>
               </div>
               
@@ -102,7 +109,7 @@ function Home() {
                 <Calendar className="info-icon" />
                 <div className="info-details">
                   <span className="info-label">Classification</span>
-                  <span className="info-value">{studentData?.Classification || "N/A"}</span>
+                  <span className="info-value">{academicInfo.Classification || "N/A"}</span>
                 </div>
               </div>
             </div>

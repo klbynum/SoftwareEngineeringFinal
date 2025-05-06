@@ -2,8 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import { useAuth } from '/Users/kemonbynum/Desktop/myPlayground/SoftwareEngineeringFinal/CoursePlanningApplication/src/AuthContext.jsx';
-
+import { useAuth } from '../../AuthContext';
 const LOGIN_URL = 'http://localhost:5001/auth';
 
 const Login = () => {
@@ -40,7 +39,7 @@ const Login = () => {
 
       if (response.ok) {
         setStudent(data.student); // Set context
-        navigate('/home'); // Redirect after login
+        navigate('/'); // Redirect after login
       } else {
         setErrMsg(data.error || 'Login failed');
       }
