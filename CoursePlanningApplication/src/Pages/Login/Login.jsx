@@ -68,7 +68,7 @@ const Login = () => {
             <Link to="/">Go to Home</Link>
           </p>
         </section>
-      ) : )
+      ) : (
     <div className="login-page">
       <div className="wrapper">
         <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"}aria-live="assertive">
