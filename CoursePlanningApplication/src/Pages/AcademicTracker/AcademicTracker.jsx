@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import './AcademicTracker.css';
 
 function AcademicTracker() {
@@ -294,6 +295,19 @@ function AcademicTracker() {
     return courses.reduce((total, course) => total + parseInt(course.credits || 0), 0);
   }, []);
 
+  // New function to handle View Track Button click
+  const handleViewTrackClick = useCallback(() => {
+    // This function will be called when the View Track button is clicked
+    // For now, let's just show an alert, but you can replace this with actual functionality
+    alert('Viewing Cybersecurity Track Details');
+    
+    // You could implement more advanced functionality here, such as:
+    // - Opening a modal with detailed track information
+    // - Scrolling to a specific section
+    // - Navigating to a different page
+    // - Fetching additional track details from the API
+  }, []);
+
   // Calculate all the data needed for rendering using memoized functions
   const progress = calculateProgress();
   const recommendedCourses = getRecommendedCourses();
@@ -415,11 +429,11 @@ function AcademicTracker() {
 
       {/* Full Degree Overview */}
       <div className="degree-overview">
-        <h2 className="section-title">Full Degree Overview - Cybersecurity Track</h2>
-        <p className="overview-description">This overview shows your entire degree plan with course statuses based on your classification as a {studentData?.Classification}. Total required credits: {progress.totalCredits}.</p>
+        <div className="degree-overview-header">
+          <h2 className="section-title">Full Degree Overview - Cybersecurity Track</h2>
+          <p className="overview-description">This overview shows your entire degree plan with course statuses based on your classification as a {studentData?.Classification}. Total required credits: {progress.totalCredits}.</p>
+        </div>
 
-
-        
         <div className="status-legend">
           <div className="status-item">
             <div className="status-indicator completed"></div>
@@ -464,6 +478,13 @@ function AcademicTracker() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* View Track Button - Added here */}
+        <div className="view-track-button-container">
+          <Link to='/Track' className="view-track-button" onClick={handleViewTrackClick}>
+            View Track Details
+          </Link>
         </div>
       </div>
       
